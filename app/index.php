@@ -11,6 +11,8 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     $row = $pdo->query('SELECT NOW() AS now')->fetch(PDO::FETCH_ASSOC);
+    $departments = $pdo->query('SELECT id, name FROM departments ORDER BY id')->fetchAll(PDO::FETCH_ASSOC);
+    $students = $pdo->query('SELECT id, name, department_id FROM students ORDER BY id')->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log($e->getMessage());
     http_response_code(503);
@@ -26,4 +28,19 @@ try {
 <p>Версия PHP: <?= h(phpversion()) ?></p>
 <p>PDO драйвер: <?= h($pdo->getAttribute(PDO::ATTR_DRIVER_NAME)) ?></p>
 <p>База: <?= h($db) ?>; пользователь: <?= h($user) ?>; хост БД: <?= h($host) ?></p>
+<h2>departments</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr><th>id</th><th>name</th></tr>
+    <?php foreach ($departments as $department): ?>
+    <tr><td><?= h($department['id']) ?></td><td><?= h($department['name']) ?></td></tr>
+    <?php endforeach; ?>
+</table>
+
+<h2>students</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr><th>id</th><th>name</th><th>department_id</th></tr>
+    <?php foreach ($students as $student): ?>
+    <tr><td><?= h($student['id']) ?></td><td><?= h($student['name']) ?></td><td><?= h($student['department_id']) ?></td></tr>
+    <?php endforeach; ?>
+</table>
 </body></html>
