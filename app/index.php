@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-$host = 'db';
-$user = 'student';
-$pass = 'student_pass';
-$db = 'lab';
+$host = getenv('DB_HOST');
+$user = getenv('DB_USER');
+$pass = getenv('DB_PASS');
+$db = getenv('DB_NAME');
 function h(mixed $value): string {
     return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
@@ -25,4 +25,5 @@ try {
 <p>Хост PHP: <?= h(gethostname()) ?></p>
 <p>Версия PHP: <?= h(phpversion()) ?></p>
 <p>PDO драйвер: <?= h($pdo->getAttribute(PDO::ATTR_DRIVER_NAME)) ?></p>
+<p>База: <?= h($db) ?>; пользователь: <?= h($user) ?>; хост БД: <?= h($host) ?></p>
 </body></html>
